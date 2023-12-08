@@ -50,10 +50,11 @@ class ChromaDBManager:
             hpo_id = metadata_json.get("original_id")
             label = metadata_json.get("label")
             if hpo_id and label:
-                hpo_id_to_data[hpo_id] = {"label": label, "embeddings": embedding} #{'HP:0005872': 'Brachytelomesophalangy'}
+                hpo_id_to_data[hpo_id] = {"label": label,
+                                          "embeddings": embedding}  # {'HP:0005872': {'Brachytelomesophalangy' :[1,2,3, ...]}}
         return hpo_id_to_data
 
-# use this for metric
+    # use this for metric
     @staticmethod
     def create_hpo_id_to_embedding(collection) -> Dict[str, Dict]:
         """
@@ -68,7 +69,7 @@ class ChromaDBManager:
             metadata_json = json.loads(metadata['_json'])
             hpo_id = metadata_json.get("original_id")
             if hpo_id:
-                hpo_id_to_data[hpo_id] = {"embeddings": embedding}
+                hpo_id_to_data[hpo_id] = {"embeddings": embedding}  # #{'HP:0005872': [1,2,3, ...]}
         return hpo_id_to_data
 
     def get_embeddings_by_hpo_ids_faster(self, ids: List[str], hpo_id_to_data_dict) -> Dict[str, Optional[np.ndarray]]:
@@ -99,4 +100,13 @@ class ChromaDBManager:
             return {"metadata": {"label": record["label"], "original_id": hpo_id}, "embeddings": record["embeddings"]}
         return None
 
+    @staticmethod
+    def calculate_average_embedding_from_cachedDict(hps, embeddings_dict):
+        embeddings = [embeddings_dict[hp_id]['embeddings'] for hp_id in hps if hp_id in embeddings_dict]
+        return np.mean(embeddings, axis=0) if embeddings else []
 
+    @staticmethod
+    # deprecated cause dict structure
+    def calculate_average_embedding(hps, embeddings_dict):
+        embeddings = [embeddings_dict[hp_id] for hp_id in hps if hp_id in embeddings_dict]
+        return np.mean(embeddings, axis=0) if embeddings else []

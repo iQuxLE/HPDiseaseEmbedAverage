@@ -1,4 +1,6 @@
 from typing import Collection
+
+import numpy as np
 import pytest
 
 from chromadb_manager import ChromaDBManager
@@ -13,6 +15,14 @@ def db_manager() -> ChromaDBManager:
 @pytest.fixture
 def ont_hp_collection(db_manager) -> Collection:
     return db_manager.client.get_collection("ont_hp")
+
+
+@pytest.fixture
+def cached_dict():
+    return {
+        'HP:0000118': {'embeddings': [1, 2, 3]},
+        'HP:0000478': {'embeddings': [4, 5, 6]},
+    }
 
 
 def test_get_embeddings_by_hpo_ids_faster(db_manager, ont_hp_collection):
@@ -32,14 +42,32 @@ def test_get_embeddings_by_hpo_ids_faster(db_manager, ont_hp_collection):
 
 def test_create_hpo_id_to_data_dict_with_embedding(db_manager, ont_hp_collection):
     hpo_id_to_data_dict = db_manager.create_hpo_id_to_data_dict_with_embedding(ont_hp_collection)
-    # print(hpo_id_to_data_dict)
-    assert hpo_id_to_data_dict is not None
-    # test that 'BSPO:0000102': {'label': 'ventral to', 'embeddings': [-0.02075735665857792, -0.006406246218830347, 0.018757153302431107, 0.009791205637156963, ..}
-    # is inside
 
-# def test_get_embeddings_by_hpo_ids_faster():
-#     fail()
-#
-#
-# def test_get_record_by_hpo_id_faster():
-#     fail()
+    assert hpo_id_to_data_dict is not None, "The returned dictionary is None"
+
+    test_hpo_id = 'BSPO:0000102'
+    expected_data = {
+        'label': 'ventral to',
+        'embeddings': [-0.02075735665857792, -0.006406246218830347, 0.018757153302431107, 0.009791205637156963]
+    }
+
+    assert test_hpo_id in hpo_id_to_data_dict, f"{test_hpo_id} is not in the dictionary"
+    assert 'label' in hpo_id_to_data_dict[test_hpo_id], f"Label missing for {test_hpo_id}"
+    assert 'embeddings' in hpo_id_to_data_dict[test_hpo_id], f"Embeddings missing for {test_hpo_id}"
+
+    assert hpo_id_to_data_dict[test_hpo_id]['label'] == expected_data[
+        'label'], f"Label for {test_hpo_id} does not match expected"
+
+    actual_embeddings = hpo_id_to_data_dict[test_hpo_id]['embeddings'][:4]
+    assert np.allclose(actual_embeddings,
+                       expected_data['embeddings']), f"First four embeddings for {test_hpo_id} do not match expected"
+
+
+def test_calculate_average_embedding_from_cachedDict(db_manager, cached_dict):
+    mock_hps = ['HP:0000118', 'HP:0000478']
+    expected_average = np.mean([[1, 2, 3], [4, 5, 6]], axis=0)
+
+    actual_average = db_manager.calculate_average_embedding_from_cachedDict(mock_hps, cached_dict)
+
+    assert np.allclose(actual_average, expected_average), "The calculated average embedding is not as expected"
+

@@ -110,3 +110,49 @@ class ChromaDBManager:
     def calculate_average_embedding(hps, embeddings_dict):
         embeddings = [embeddings_dict[hp_id] for hp_id in hps if hp_id in embeddings_dict]
         return np.mean(embeddings, axis=0) if embeddings else []
+
+    @staticmethod
+    def extract_omim_hpo_mappings_from_collection(collection):
+        omim_hpo_dict = {}
+
+        for item in collection.get():
+            metadata = item['metadatas'][0]
+            omim_id = metadata['disease']
+            hpo_id = metadata['phenotype']
+
+            if omim_id in omim_hpo_dict:
+                omim_hpo_dict[omim_id].add(hpo_id)
+            else:
+                omim_hpo_dict[omim_id] = {hpo_id}
+
+        for omim in omim_hpo_dict:
+            omim_hpo_dict[omim] = list(omim_hpo_dict[omim])
+
+        return omim_hpo_dict
+
+    @staticmethod
+    # just for testing with lim 1
+    # works with dic directly instead of collection as this limit = 1 gets a dict
+    def extract_omim_hpo_mappings_from_dict_via_jsonstring(record):
+        omim_hpo_dict = {}
+
+        metadata_json = record['metadatas'][0]['_json']
+        metadata = json.loads(metadata_json)
+
+        omim_id = metadata['disease']
+        hpo_id = metadata['phenotype']
+
+        if omim_id not in omim_hpo_dict:
+            omim_hpo_dict[omim_id] = []
+        omim_hpo_dict[omim_id].append(hpo_id)
+
+        return omim_hpo_dict
+
+    # use to compare the averaged vector from one disease and do cosine similarity with the vectors of the HPs that all belong to that disease
+    @staticmethod
+    def cosine_similarity(vec1, vec2):
+        dot_product = np.dot(vec1, vec2)
+        magnitude = np.linalg.norm(vec1) * np.linalg.norm(vec2)
+        if magnitude == 0:
+            return 0
+        return dot_product / magnitude

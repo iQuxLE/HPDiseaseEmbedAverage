@@ -1,0 +1,16 @@
+#description: "HPO annotations for rare diseases [8181: OMIM; 47: DECIPHER; 4242 ORPHANET]"
+#version: 2023-10-09
+#tracker: https://github.com/obophenotype/human-phenotype-ontology/issues
+#hpo-version: http://purl.obolibrary.org/obo/hp/releases/2023-10-09/hp.json
+database_id	disease_name	qualifier	hpo_id	reference	evidence	onset	frequency	sex	modifier	aspect	biocuration
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0011097	PMID:31675180	PCS		1/2			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0002187	PMID:31675180	PCS		1/1			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0001518	PMID:31675180	PCS		1/2			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0032792	PMID:31675180	PCS		1/2			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0011451	PMID:31675180	PCS		1/2			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0010851	PMID:31675180	PCS		2/2			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0001789	PMID:31675180	PCS		1/2			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0200134	PMID:31675180	PCS		2/2			P	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0001522	PMID:31675180	PCS		1/2			C	HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0000006	PMID:31675180	PCS					I	HPO:probinson[2021-06-21];HPO:probinson[2021-06-21]
+OMIM:619340	Developmental and epileptic encephalopathy 96		HP:0002643	PMID:31675180	PCS		2/2			P	HPO:probinson[2021-06-21]

@@ -14,7 +14,7 @@ class ChromaDBManager:
 
     def create_collection(self, name):
         try:
-            collection = self.client.create_collection(name)
+            collection = self.client.create_collection(name=name, metadata={"hnsw:space": "cosine"})
             return collection
         except chromadb.db.base.UniqueConstraintError:
             print(f"Collection {name} already exists")
@@ -84,6 +84,20 @@ class ChromaDBManager:
         """
         cachedDict = self.create_hpo_id_to_embedding()
         hpoToEmbedding = self.get_collection("HPOtoEmbeddings")
+        for hp, data in cachedDict.items():
+            embedding_list = data['embeddings']
+            hpoToEmbedding.upsert(ids=[hp], embeddings=[embedding_list], metadatas=[{"type": "HP"}])
+        return hpoToEmbedding
+
+
+    def upsert_from_ont_hp_into_hpembedding_collection(self) -> Collection:
+        """
+        Upserts embeddings for each HPO ID into the "HPOtoEmbeddings" collection.
+
+        :return: The updated "HPOtoEmbeddings" collection.
+        """
+        cachedDict = self.create_hpo_id_to_embedding()
+        hpoToEmbedding = self.get_collection("HpEmbeddings")
         for hp, data in cachedDict.items():
             embedding_list = data['embeddings']
             hpoToEmbedding.upsert(ids=[hp], embeddings=[embedding_list], metadatas=[{"type": "HP"}])

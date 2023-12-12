@@ -1,0 +1,6 @@
+{
+  "test_chromadb_manager.py::TestChromaDBManager::test_create_hpo_id_to_data_dict_with_embedding": true,
+  "test_chromadb_manager.py::test_extraction_functions_produce_same_output": true,
+  "test_chromadb_manager.py::test_collection_based_output": true,
+  "test_chromadb_manager.py::test_full_collection_output": true
+}

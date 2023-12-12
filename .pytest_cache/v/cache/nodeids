@@ -1,0 +1,10 @@
+[
+  "test_chromadb_manager.py::TestChromaDBManager::test_create_hpo_id_to_data_dict_with_embedding",
+  "test_chromadb_manager.py::test_calculate_average_embedding_from_cachedDict",
+  "test_chromadb_manager.py::test_collection_based_output",
+  "test_chromadb_manager.py::test_create_hpo_id_to_data_dict_with_embedding",
+  "test_chromadb_manager.py::test_extraction_functions_produce_same_output",
+  "test_chromadb_manager.py::test_full_collection_output",
+  "test_chromadb_manager.py::test_get_embeddings_by_hpo_ids_faster",
+  "test_chromadb_manager.py::test_output_filebased"
+]

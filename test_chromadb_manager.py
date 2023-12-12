@@ -3,7 +3,7 @@ from typing import Collection
 import numpy as np
 import pytest
 
-from chromadb_manager import ChromaDBManager
+from core.chromadb_manager import ChromaDBManager
 
 
 @pytest.fixture

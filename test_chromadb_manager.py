@@ -72,7 +72,7 @@ def test_calculate_average_embedding_from_cachedDict(db_manager, cached_dict):
     mock_hps = ['HP:0000118', 'HP:0000478']
     expected_average = np.mean([[1, 2, 3], [4, 5, 6]], axis=0)
 
-    actual_average = db_manager.calculate_average_embedding_from_cachedDict(mock_hps, cached_dict)
+    actual_average = db_manager.calculate_average_embedding(mock_hps, cached_dict)
 
     assert np.allclose(actual_average, expected_average), "The calculated average embedding is not as expected"
 
